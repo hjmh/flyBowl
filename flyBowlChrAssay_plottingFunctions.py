@@ -89,7 +89,7 @@ def plotPosInRange(ax, frameRange, xPos, yPos, angle, flyID, currCmap):
 def plotBodyAngle(ax, x, y, angle, markerColor, alphaVal, arrowScale):
     try:
         newArrow = patches.Arrow(x, y, np.cos(angle).squeeze()*arrowScale, np.sin(angle).squeeze()*arrowScale, width=2,
-                                 edgecolor=markerColor, alpha=alphaVal)
+                                 edgecolor=markerColor, facecolor=markerColor, alpha=alphaVal)
         ax.add_patch(newArrow)
     except:
         couldNotPrint = True
@@ -142,7 +142,7 @@ def plotPosAndAngleInRange_singleFly_separateTrials(fig, trialBegin_traces, numT
     scalarMap = plt.cm.ScalarMappable(norm=cNorm, cmap=currCmap)
 
     for trial in range(numTrials):
-        ax = fig.add_subplot(np.ceil(numTrials/5.0),5,trial)
+        ax = fig.add_subplot(np.ceil(numTrials/5.0), 5, trial)
 
         #define window around stimulation pulse which should be plotted
         frameRangeStim = range(trialBegin_traces[trial], trialBegin_traces[trial]+stimFrames, skipFrame)
@@ -156,8 +156,8 @@ def plotPosAndAngleInRange_singleFly_separateTrials(fig, trialBegin_traces, numT
                           angle[frame][flyID[frame] == fly], currCol, 0.5, 22)
 
         for ind, frame in enumerate(frameRangePost):
-            currCol=scalarMap.to_rgba(trial)
-            ax.plot(xPos[frame][flyID[frame] == fly],yPos[frame][flyID[frame] == fly],
+            currCol = scalarMap.to_rgba(trial)
+            ax.plot(xPos[frame][flyID[frame] == fly], yPos[frame][flyID[frame] == fly],
                     marker='.', markersize=6, linestyle='none', alpha=0.5, color=currCol)
             plotBodyAngle(ax, xPos[frame][flyID[frame] == fly], yPos[frame][flyID[frame] == fly],
                           angle[frame][flyID[frame] == fly], currCol, 0.5, 22)
@@ -165,3 +165,81 @@ def plotPosAndAngleInRange_singleFly_separateTrials(fig, trialBegin_traces, numT
         ax.set_aspect('equal')
         plt.axis('off')
         sns.despine(right=True, left=True, bottom=True, top=True)
+
+
+def plotPosAndAngleInRange_singleFly_separateTrials2(fig, trialBegin_traces, numTrials, stimFrames, preStimFrames,
+                                             postStimFrames, skipFrame, xPos, yPos, angle, fly, flyID, colorRange):
+
+    for trial in range(numTrials):
+        ax = fig.add_subplot(np.ceil(numTrials/5.0), 5, trial)
+
+        #define window around stimulation pulse which should be plotted
+        frameRangePre = range(trialBegin_traces[trial]-preStimFrames, trialBegin_traces[trial], skipFrame)
+        frameRangeStim = range(trialBegin_traces[trial], trialBegin_traces[trial]+stimFrames, skipFrame)
+        frameRangePost = range(trialBegin_traces[trial]+stimFrames, trialBegin_traces[trial]+postStimFrames, skipFrame)
+
+        for ind, frame in enumerate(frameRangePre):
+            currCol = colorRange[0]
+            ax.plot(xPos[frame][flyID[frame] == fly], yPos[frame][flyID[frame] == fly], marker='.', markersize=6,
+                    linestyle='none', alpha=0.5, markerfacecolor=currCol, markeredgecolor=currCol)
+            plotBodyAngle(ax, xPos[frame][flyID[frame] == fly], yPos[frame][flyID[frame] == fly],
+                          angle[frame][flyID[frame] == fly], currCol, 0.5, 22)
+
+        for ind, frame in enumerate(frameRangeStim):
+            currCol = colorRange[1]
+            ax.plot(xPos[frame][flyID[frame] == fly],yPos[frame][flyID[frame] == fly], marker='.', markersize=6,
+                    linestyle='none', alpha=0.5, markerfacecolor=currCol, markeredgecolor=currCol)
+            plotBodyAngle(ax, xPos[frame][flyID[frame] == fly], yPos[frame][flyID[frame] == fly],
+                          angle[frame][flyID[frame] == fly], currCol, 0.5, 22)
+
+        for ind, frame in enumerate(frameRangePost):
+            currCol = colorRange[2]
+            ax.plot(xPos[frame][flyID[frame] == fly],yPos[frame][flyID[frame] == fly], marker='.', markersize=6,
+                    linestyle='none', alpha=0.5, markerfacecolor=currCol, markeredgecolor=currCol)
+            plotBodyAngle(ax, xPos[frame][flyID[frame] == fly],yPos[frame][flyID[frame] == fly],
+                          angle[frame][flyID[frame] == fly], currCol, 0.5, 22)
+
+        ax.set_aspect('equal')
+        plt.axis('off')
+        sns.despine(right=True, left=True, bottom=True, top=True)
+
+
+def plotPosAndAngleInRange_singleFly_separateTrials3(fig,trialBegin_traces,numTrials,stimFrames,preStimFrames,
+                                             postStimFrames,skipFrame,xPos,yPos,angle,fly, flyID,colorRange):
+
+    for trial in range(numTrials):
+        ax = fig.add_subplot(np.ceil(numTrials/5.0),5,trial)
+
+        #define window around stimulation pulse which should be plotted
+        frameRangePre = range(trialBegin_traces[trial]-preStimFrames,trialBegin_traces[trial],skipFrame)
+        frameRangeStim = range(trialBegin_traces[trial],trialBegin_traces[trial]+stimFrames,skipFrame)
+        frameRangePost = range(trialBegin_traces[trial]+stimFrames,trialBegin_traces[trial]+postStimFrames,skipFrame)
+
+        alignAngle = angle[frameRangeStim[0]][flyID[frameRangeStim[0]] == fly]
+        shiftedAngle = (angle[flyID == fly] - alignAngle)
+        shiftedAngle[shiftedAngle>np.pi] = shiftedAngle[shiftedAngle>np.pi]-2*np.pi
+        shiftedAngle[shiftedAngle<-np.pi] = shiftedAngle[shiftedAngle<-np.pi]+2*np.pi
+        rotX = np.cos(alignAngle)*xPos[flyID == fly] + np.sin(alignAngle)*yPos[flyID == fly]
+        rotY = -np.sin(alignAngle)*xPos[flyID == fly] + np.cos(alignAngle)*yPos[flyID == fly]
+
+        for ind, frame in enumerate(frameRangePre):
+            currCol=colorRange[0]
+            ax.plot(rotX[frame],rotY[frame],
+                    marker='.',markersize = 6, linestyle='none',alpha=0.5 ,markerfacecolor=currCol,markeredgecolor=currCol)
+            plotBodyAngle(ax,rotX[frame],rotY[frame],shiftedAngle[frame],currCol,0.5,22)
+
+        for ind, frame in enumerate(frameRangeStim):
+            currCol = colorRange[1]
+            ax.plot(rotX[frame],rotY[frame],
+                    marker='.',markersize = 6, linestyle='none',alpha=0.5 ,markerfacecolor=currCol,markeredgecolor=currCol)
+            plotBodyAngle(ax,rotX[frame],rotY[frame],shiftedAngle[frame],currCol,0.5,22)
+
+        for ind, frame in enumerate(frameRangePost):
+            currCol= colorRange[2]
+            ax.plot(rotX[frame],rotY[frame],
+                    marker='.',markersize = 6, linestyle='none',alpha=0.5 ,markerfacecolor=currCol,markeredgecolor=currCol)
+            plotBodyAngle(ax,rotX[frame],rotY[frame],shiftedAngle[frame],currCol,0.5,22)
+
+        ax.set_aspect('equal')
+        plt.axis('off')
+        sns.despine(right=True,left=True,bottom=True,top=True)

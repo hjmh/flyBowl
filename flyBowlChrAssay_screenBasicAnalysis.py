@@ -26,17 +26,33 @@ rootDir = '/Volumes/jayaraman/Chuntao/Ming_FlyBowl/'
 analysisDir = '/Volumes/jayaraman/Hannah/Analysis_Ming_FlyBowl/'
 
 # ----------------------------------------------------------------------------------------------------------------------
-dateDirs = os.walk(rootDir).next()[1]
+dateDir = 'Lori_CsChrimson_Screen'
+expList = os.walk(rootDir+dateDir).next()[1]
 
-for currDateDir in range(len(dateDirs)):
-    dateDir = dateDirs[currDateDir]
-    expList = os.walk(rootDir+dateDir).next()[1] # + 'rawData' + sep
+for currDir in range(len(expList)):
+    folder = expList[currDir]
 
-    # ----------------------------------------------------------------------------------------------------------------------
     # Per experiment analysis
-    # ----------------------------------------------------------------------------------------------------------------------
+    # ------------------------------------------------------------------------------------------------------------------
+    screenSingleExpAnalysis(rootDir, analysisDir, dateDir, folder)
+    # ------------------------------------------------------------------------------------------------------------------
 
-    for currDir in range(len(expList)):
-        folder = expList[currDir]
+# rootDir = '/Volumes/jayaraman/Chuntao/Ming_FlyBowl/'
+# analysisDir = '/Volumes/jayaraman/Hannah/Analysis_Ming_FlyBowl/'
+#
+# ----------------------------------------------------------------------------------------------------------------------
+# dateDirs = os.walk(rootDir).next()[1]
+#
+# for currDateDir in range(len(dateDirs)):
+#     dateDir = dateDirs[currDateDir]
+#     expList = os.walk(rootDir+dateDir).next()[1]
+#
+# ----------------------------------------------------------------------------------------------------------------------
+# Per experiment analysis
+# ----------------------------------------------------------------------------------------------------------------------
+#
+#     for currDir in range(len(expList)):
+#         folder = expList[currDir]
+#
+#         screenSingleExpAnalysis(rootDir, analysisDir, dateDir, folder)
 
-        screenSingleExpAnalysis(rootDir, analysisDir, dateDir, folder)
