@@ -16,9 +16,7 @@ from os.path import isfile, sep
 
 import seaborn as sns
 
-from flyBowlChrAssay_plottingFunctions import plotSparseMatrix, plotPosInRange, plotVeloHistogram,\
-    veloPerTrial, veloPerTrialAverage, plotPosAndAngleInRange_singleFly_colorStim,\
-    plotPosAndAngleInRange_singleFly_colorTrial, plotPosAndAngleInRange_singleFly_separateTrials
+from flyBowlChrAssay_plottingFunctions import plotSparseMatrix, plotPosInRange, plotVeloHistogram,veloPerTrial, veloPerTrialAverage, plotPosAndAngleInRange_singleFly_colorStim,plotPosAndAngleInRange_singleFly_colorTrial, plotPosAndAngleInRange_singleFly_separateTrials
 
 from flyBowlChrAssay_screenSingleExpAnalysis import screenSingleExpAnalysis
 

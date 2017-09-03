@@ -19,9 +19,7 @@ from os.path import isfile, sep
 
 import seaborn as sns
 
-from flyBowlChrAssay_plottingFunctions import plotSparseMatrix, plotPosInRange, plotVeloHistogram,\
-    veloPerTrial, veloPerTrialAverage, plotPosAndAngleInRange_singleFly_colorStim,\
-    plotPosAndAngleInRange_singleFly_colorTrial, plotPosAndAngleInRange_singleFly_separateTrials
+from flyBowlChrAssay_plottingFunctions import plotSparseMatrix, plotPosInRange, plotVeloHistogram, veloPerTrial, veloPerTrialAverage, plotPosAndAngleInRange_singleFly_colorStim, plotPosAndAngleInRange_singleFly_colorTrial, plotPosAndAngleInRange_singleFly_separateTrials
 
 
 def screenSingleExpAnalysis(rootDir, analysisDir, dateDir, folder):
@@ -62,7 +60,7 @@ def screenSingleExpAnalysis(rootDir, analysisDir, dateDir, folder):
         print('Not reanalysing current experiments')
         return
 
-    # Import and rearrange data ...........................................................................................
+    # Import and rearrange data .................................................................
     fileName = 'ctrax_results'
 
     # Extract relevant tracking parameter
@@ -103,7 +101,7 @@ def screenSingleExpAnalysis(rootDir, analysisDir, dateDir, folder):
         for idx in np.array(flyID[frame]).squeeze().astype('int'):
             flyIDperFrame[frame][idx] = 1
 
-    # Extract protocol parameter ......................................................................................
+    # Extract protocol parameter ................................................................
     protocol = loadmat(rootDir + dateDir + sep + folder + sep + 'protocol.mat') #load protocol parameter
     protocol = protocol['protocol'] #extract values from dict
 
@@ -133,7 +131,7 @@ def screenSingleExpAnalysis(rootDir, analysisDir, dateDir, folder):
     trialBlockPts = ((stimTms+pauseTms)/1000.0)*fps/skipFrame
     trialBlockT = np.linspace(0,(stimTms+pauseTms)/1000.0,trialBlockPts)
 
-    # Compute translational and rotational velocity over entire experiment ............................................
+    # Compute translational and rotational velocity over entire experiment ......................
     frameRange = range((delayStart)*fps,(delayStart + numRepeat*((stimTms+pauseTms)/1000)) * fps,skipFrame)
     activeFragments = np.array(np.nonzero(sum(flyIDperFrame[frameRange]))).squeeze()
 
@@ -163,14 +161,14 @@ def screenSingleExpAnalysis(rootDir, analysisDir, dateDir, folder):
         rotV[:,k] = currRotV.squeeze()
         rotV_filt[:,k] = np.convolve(currRotV.squeeze(), np.ones((5,))/5, mode='same')
 
-    # Visualise tracking performance ..................................................................................
+    # Visualise tracking performance ............................................................
     fragmentFig = plotSparseMatrix((7,5),0.003,flyIDperFrame, genotype + '\n' + experiment + '\n')
 
     fragmentFig.savefig(plotSaveDir + '/' + genotype + '_' + experiment + '_traceFragments.pdf', format='pdf')
 
     plt.close('all')
 
-    # Plot tracking data ..............................................................................................
+    # Plot tracking data ........................................................................
     # (1) Visualise response of all flies to first light pulse
     fig = plt.figure(figsize=(10,10))
     sbplt = fig.add_subplot(111)
@@ -376,7 +374,7 @@ def screenSingleExpAnalysis(rootDir, analysisDir, dateDir, folder):
 
     plt.close('all')
 
-    # Compute 'extreme flies' .........................................................................................
+    # Compute 'extreme flies' ...................................................................
     maxRotFly = np.nanargmax(abs(perFlyAvVR[:,1]),axis=0)
     maxVFly = np.nanargmax(perFlyAvVT[:,1],axis=0)
     minVFly = np.nanargmax(abs(perFlyAvVT[:,1]-perFlyAvVT[:,2]),axis=0)

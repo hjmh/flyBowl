@@ -20,10 +20,13 @@ from matplotlib import gridspec
 import os
 import sys
 
+# Set path to analysis code directory
+codeDir = sep.join(os.getcwd().split(sep)[:-2])
+path.insert(1, codeDir)
+
 # import custom written plotting functions
-sys.path.insert(0, '/Users/hannah/Dropbox/code/plottingUtilities')
-from flyBowlChrAssay_plottingFunctions import *
-from ctraxFlyTracePlots import *
+from plottingUtilities.flyBowlChrAssay_plottingFunctions import *
+from plottingUtilities.ctraxFlyTracePlots import *
 
 rootDir = '/Volumes/public/Ming2Chuntao/2015-06-09'
 analysisDir = '/Volumes/jayaramanlab/Hannah/FlyBowlAnalysis'
